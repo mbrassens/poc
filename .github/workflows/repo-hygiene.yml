@@ -1,0 +1,42 @@
+name: Repo Hygiene
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check no root dependency manifests
+        run: |
+          for f in package.json package-lock.json pnpm-lock.yaml yarn.lock pyproject.toml requirements.txt Cargo.toml go.mod; do
+            if [ -f "$f" ]; then
+              echo "::error::Root dependency file '$f' is not allowed. Keep dependencies isolated inside pocs/<slug>/."
+              exit 1
+            fi
+          done
+
+      - name: Check no .env files committed
+        run: |
+          ENV_FILES=$(git ls-files | grep -E '(^|/)\.env(\.[^/]+)?$' | grep -v '\.env\.example$' || true)
+          if [ -n "$ENV_FILES" ]; then
+            echo "::error::Committed .env file(s) detected: $ENV_FILES"
+            exit 1
+          fi
+
+      - name: Check every POC directory has a README.md
+        run: |
+          if [ -d "pocs" ]; then
+            for dir in pocs/*/; do
+              [ -d "$dir" ] || continue
+              if [ ! -f "${dir}README.md" ]; then
+                echo "::error::Missing README.md in ${dir}"
+                exit 1
+              fi
+            done
+          fi
