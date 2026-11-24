@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kobento Prompt-to-Widget Studio</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <div>
+          <h1>Kobento Prompt-to-Widget Studio</h1>
+          <p class="subtitle">Server-Driven Binary UI (RemoteCompose <code>.rc</code> + <code>kobento-ts</code>)</p>
+        </div>
+      </div>
+      <div class="topbar-meta">
+        <span id="mode-badge" class="badge badge-neutral">Checking mode…</span>
+        <a class="badge badge-link" href="https://mcp.kobento.dev/" target="_blank" rel="noreferrer">mcp.kobento.dev ↗</a>
+      </div>
+    </header>
+
+    <section class="prompt-section">
+      <form id="prompt-form" class="prompt-form">
+        <input
+          id="prompt-input"
+          type="text"
+          placeholder="Describe a widget (e.g., 'Pomodoro timer with progress ring', 'Flight boarding pass', 'System CPU & memory gauge', 'Tip calculator')..."
+          autocomplete="off"
+        />
+        <button id="generate-btn" type="submit" class="btn btn-primary">Generate Widget</button>
+      </form>
+      <div id="preset-bar" class="preset-bar" aria-label="Preset widgets"></div>
+    </section>
+
+    <main class="workspace">
+      <!-- Left: RemoteCompose JSON Editor -->
+      <section class="panel panel-editor">
+        <div class="panel-header">
+          <h2>RemoteCompose JSON</h2>
+          <div class="panel-actions">
+            <button id="format-btn" type="button" class="btn btn-ghost btn-sm">Format</button>
+            <button id="compile-btn" type="button" class="btn btn-secondary btn-sm">Compile → .rc</button>
+          </div>
+        </div>
+        <div id="status-banner" class="status-banner hidden" role="alert"></div>
+        <textarea id="json-editor" class="json-editor" spellcheck="false" aria-label="RemoteCompose JSON source"></textarea>
+      </section>
+
+      <!-- Center: Live kobento-ts Canvas Stage -->
+      <section class="panel panel-stage">
+        <div class="panel-header">
+          <h2>Live <code>kobento-ts</code> Player</h2>
+          <div class="viewport-group" role="group" aria-label="Viewport size">
+            <button type="button" class="vp-btn" data-w="360" data-h="210">Widget</button>
+            <button type="button" class="vp-btn active" data-w="380" data-h="460">Card</button>
+            <button type="button" class="vp-btn" data-w="320" data-h="320">Square</button>
+            <button type="button" class="vp-btn" data-w="560" data-h="340">Panel</button>
+          </div>
+        </div>
+
+        <div class="stage-canvas-wrap">
+          <div class="canvas-frame">
+            <canvas id="rc-canvas" width="380" height="460"></canvas>
+          </div>
+        </div>
+
+        <div class="telemetry-bar">
+          <div class="telemetry-stats">
+            <span>Raw: <strong id="stat-raw">—</strong></span>
+            <span>Compressed: <strong id="stat-compressed">—</strong></span>
+            <span>Compile: <strong id="stat-ms">—</strong></span>
+            <span>Source: <strong id="stat-source">—</strong></span>
+          </div>
+          <button id="download-btn" type="button" class="btn btn-ghost btn-sm" disabled>Download .rc</button>
+        </div>
+      </section>
+
+      <!-- Right: Live Host Variables & Actions Inspector -->
+      <section class="panel panel-inspector">
+        <div class="panel-header">
+          <h2>Host API (<code>createHostApi</code>)</h2>
+          <span class="hint">Live state without recompiling</span>
+        </div>
+
+        <div class="inspector-section">
+          <h3>Named Variables</h3>
+          <div id="variables-list" class="variables-list">
+            <p class="empty-state">Load a widget to inspect its live variables.</p>
+          </div>
+        </div>
+
+        <div class="inspector-section inspector-events">
+          <div class="section-row">
+            <h3>Action &amp; State Events</h3>
+            <button id="clear-log-btn" type="button" class="btn btn-ghost btn-xs">Clear</button>
+          </div>
+          <ul id="event-log" class="event-log"></ul>
+        </div>
+      </section>
+    </main>
+
+    <script src="/vendor/kobento-player.js"></script>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

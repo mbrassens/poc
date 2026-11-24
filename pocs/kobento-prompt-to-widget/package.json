@@ -1,0 +1,23 @@
+{
+  "name": "kobento-prompt-to-widget",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "AI-generated Server-Driven UI POC using Kobento RemoteCompose (.rc), json2rc, and kobento-ts",
+  "scripts": {
+    "setup": "bash scripts/setup-kobento.sh",
+    "build:client": "esbuild src/public/app.ts --bundle --outfile=dist/public/app.js --format=esm --target=es2022 --sourcemap",
+    "build": "npm run build:client && tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "dev": "npm run build:client && tsx src/server.ts",
+    "start": "npm run build:client && tsx src/server.ts",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "esbuild": "^0.25.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.5"
+  }
+}
