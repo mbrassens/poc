@@ -6,7 +6,7 @@ A sandbox repository for self-contained technical proof-of-concepts and product 
 
 | POC | Status | Stack | Date | Summary |
 | --- | --- | --- | --- | --- |
-| *(none yet)* | — | — | — | Ready for the first experiment |
+| [`kobento-prompt-to-widget`](pocs/kobento-prompt-to-widget/) | `in-progress` | TypeScript, Node.js, Kobento (`kobento-ts`, `json2rc`) | 2026-11-24 | AI-generated Server-Driven UI studio compiling RemoteCompose JSON to `.rc` binaries with live `createHostApi` controls |
 
 > **Status legend:** `idea` · `in-progress` · `done` · `archived`
 
